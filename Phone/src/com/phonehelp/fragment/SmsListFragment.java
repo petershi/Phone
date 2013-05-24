@@ -34,7 +34,6 @@ public class SmsListFragment extends Fragment implements OnClickListener {
 		View view = inflater.inflate(R.layout.smslist_fragment, container,
 				false);
 		sDBUtil = new SmsDBUtil(getActivity());
-		sDBUtil.open();
 		Cursor cursor = sDBUtil.querySMS();
 		sAdapter = new SmsListAdapter(inflater, getActivity()
 				.getContentResolver());
@@ -81,7 +80,6 @@ public class SmsListFragment extends Fragment implements OnClickListener {
 	}
 
 	private void refresh() {
-		sDBUtil.open();
 		Cursor cursor = sDBUtil.querySMS();
 		sAdapter.setCursor(cursor);
 		sAdapter.notifyDataSetChanged();
@@ -96,7 +94,6 @@ public class SmsListFragment extends Fragment implements OnClickListener {
 				Date date = new Date(sAdapter.getCursor().getLong(1));
 				dates.add(date);
 			}
-			sDBUtil.open();
 			sDBUtil.deleteRecord(dates);
 			sDBUtil.closeDB();
 		}
@@ -123,7 +120,6 @@ public class SmsListFragment extends Fragment implements OnClickListener {
 				} catch (Exception e) {
 				}
 			}
-			sDBUtil.open();
 			sDBUtil.deleteRecord(dates);
 			sDBUtil.closeDB();
 
