@@ -31,7 +31,6 @@ public class SmsListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 //		setContentView(R.layout.smslist_activity);
 		sDBUtil = new SmsDBUtil(this);
-		sDBUtil.open();
 		Cursor cursor = sDBUtil.querySMS();
 		sAdapter = new SmsListAdapter(getLayoutInflater(), getContentResolver());
 		sAdapter.setCursor(cursor);
@@ -112,7 +111,6 @@ public class SmsListActivity extends ListActivity {
 	}
 
 	private void refresh() {
-		sDBUtil.open();
 		Cursor cursor = sDBUtil.querySMS();
 		sAdapter.setCursor(cursor);
 		sAdapter.notifyDataSetChanged();
@@ -127,7 +125,6 @@ public class SmsListActivity extends ListActivity {
 				Date date = new Date(sAdapter.getCursor().getLong(1));
 				dates.add(date);
 			}
-			sDBUtil.open();
 			sDBUtil.deleteRecord(dates);
 			sDBUtil.closeDB();
 		}
@@ -154,7 +151,6 @@ public class SmsListActivity extends ListActivity {
 				} catch (Exception e) {
 				}
 			}
-			sDBUtil.open();
 			sDBUtil.deleteRecord(dates);
 			sDBUtil.closeDB();
 

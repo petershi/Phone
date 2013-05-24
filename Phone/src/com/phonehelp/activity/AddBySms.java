@@ -115,7 +115,6 @@ public class AddBySms extends ListActivity {
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> list1 = new ArrayList<String>();
 		ArrayList<String> list2 = new ArrayList<String>();
-		bDBUtil.open();
 		Cursor cursor = adapter.getCursor();
 		for (int i = 0; i < adapter.getCount(); i++) {
 			if (adapter.getSelectedItem().get(i)) {

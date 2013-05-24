@@ -85,7 +85,6 @@ public class AddByCall extends Activity implements OnClickListener {
 		ArrayList<String> list = new ArrayList<String>();
 		ArrayList<String> list1 = new ArrayList<String>();
 		ArrayList<String> list2 = new ArrayList<String>();
-		bDBUtil.open();
 		Cursor cursor = mAdapter.getCursor();
 		for (int i = 0; i < mAdapter.getCount(); i++) {
 			if (mAdapter.getSelectedItem().get(i)) {

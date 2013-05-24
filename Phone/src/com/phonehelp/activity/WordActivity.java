@@ -35,7 +35,6 @@ public class WordActivity extends ListActivity {
 		this.setTitle(R.string.keyword);
 		ListView listView = this.getListView();
 		wDBUtil = new WordDBUtil(this);
-		wDBUtil.open();
 		Cursor cursor = wDBUtil.query();
 		wAdapter = new WordListAdapter(getLayoutInflater());
 		wAdapter.setCursor(cursor);
@@ -93,7 +92,6 @@ public class WordActivity extends ListActivity {
 	}
 
 	private void refresh() {
-		wDBUtil.open();
 		Cursor cursor = wDBUtil.query();
 		wAdapter.setCursor(cursor);
 		wAdapter.notifyDataSetChanged();
@@ -165,7 +163,6 @@ public class WordActivity extends ListActivity {
 				// wDBUtil.delete(wAdapter.cursor.getString(0));
 			}
 		}
-		wDBUtil.open();
 		wDBUtil.delete(list);
 		wDBUtil.closeDB();
 

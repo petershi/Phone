@@ -10,13 +10,9 @@ import com.phonehelp.util.AppUtils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -44,7 +40,6 @@ public class BlackListActivity extends Activity implements
 		this.setTitle(R.string.blacklist);
 
 		bDBUtil = new BlacklistDBUtil(this);
-		bDBUtil.open();
 
 		Cursor cursor = bDBUtil.queryNum();
 		bAdapter = new BlackListAdapter(getLayoutInflater(),
@@ -133,8 +128,6 @@ public class BlackListActivity extends Activity implements
 	 */
 	private void refresh() {
 
-		bDBUtil.open();
-
 		Cursor cursor = bDBUtil.queryNum();
 		bAdapter.setCursor(cursor);
 		bAdapter.notifyDataSetChanged();
@@ -203,7 +196,6 @@ public class BlackListActivity extends Activity implements
 				list.add(bAdapter.getCursor().getString(0));
 			}
 		}
-		bDBUtil.open();
 		bDBUtil.deleteNum(list);
 		bDBUtil.closeDB();
 

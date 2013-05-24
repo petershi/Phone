@@ -12,17 +12,9 @@ public class BlacklistDBUtil {
 
 	private DBOpenHelper mOpenHelper;
 	private SQLiteDatabase db;
-	private Context context;
 
 	public BlacklistDBUtil(Context context) {
-		this.context = context;
-	}
-
-	public BlacklistDBUtil open() throws SQLException {
-		mOpenHelper = new DBOpenHelper(context, DBOpenHelper.DATABASE_NAME,
-				null, DBOpenHelper.VERSION);
-
-		return this;
+		mOpenHelper = new DBOpenHelper(context);
 	}
 
 	/**
@@ -32,10 +24,11 @@ public class BlacklistDBUtil {
 	 */
 	public Cursor queryNum() {
 		db = mOpenHelper.getReadableDatabase();
-		String[] col = { DBOpenHelper.PHONENUMBER, DBOpenHelper.BLOCKEDTIMES };
-		Cursor cursor = db.query(DBOpenHelper.TABLE_BLACKLIST, col,
-				DBOpenHelper.TAG + "=1", null, null, null,
-				DBOpenHelper.BLOCKEDTIMES + " DESC");
+		String[] col = { SqlStatement.COLUMN_PHONENUMBER,
+				SqlStatement.COLUMN_BLOCKED_TIMES };
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_BLACKLIST, col,
+				SqlStatement.COLUMN_ID + "=1", null, null, null,
+				SqlStatement.COLUMN_BLOCKED_TIMES + " DESC");
 
 		return cursor;
 	}
@@ -52,19 +45,20 @@ public class BlacklistDBUtil {
 
 		if (isNumExist(str)) {
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(DBOpenHelper.TAG, 1);
+			contentValues.put(SqlStatement.COLUMN_TAG, 1);
 
 			db = mOpenHelper.getWritableDatabase();
 
-			db.update(DBOpenHelper.TABLE_BLACKLIST, contentValues,
-					DBOpenHelper.PHONENUMBER + " = ?", new String[] { str });
+			db.update(SqlStatement.DB_TABLE_BLACKLIST, contentValues,
+					SqlStatement.COLUMN_PHONENUMBER + " = ?",
+					new String[] { str });
 		} else {
 
 			try {
 				db = mOpenHelper.getWritableDatabase();
 				ContentValues values = new ContentValues();
-				values.put(DBOpenHelper.PHONENUMBER, str);
-				db.insert(DBOpenHelper.TABLE_BLACKLIST, null, values);
+				values.put(SqlStatement.COLUMN_PHONENUMBER, str);
+				db.insert(SqlStatement.DB_TABLE_BLACKLIST, null, values);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -79,8 +73,8 @@ public class BlacklistDBUtil {
 		try {
 			for (int i = 0; i < list.size(); i++) {
 				ContentValues values = new ContentValues();
-				values.put(DBOpenHelper.PHONENUMBER, list.get(i));
-				db.insert(DBOpenHelper.TABLE_BLACKLIST, null, values);
+				values.put(SqlStatement.COLUMN_PHONENUMBER, list.get(i));
+				db.insert(SqlStatement.DB_TABLE_BLACKLIST, null, values);
 			}
 			db.setTransactionSuccessful();
 		} catch (Exception e) {
@@ -96,9 +90,9 @@ public class BlacklistDBUtil {
 		try {
 			for (int i = 0; i < list.size(); i++) {
 				ContentValues contentValues = new ContentValues();
-				contentValues.put(DBOpenHelper.TAG, 1);
-				db.update(DBOpenHelper.TABLE_BLACKLIST, contentValues,
-						DBOpenHelper.PHONENUMBER + " = ?",
+				contentValues.put(SqlStatement.COLUMN_TAG, 1);
+				db.update(SqlStatement.DB_TABLE_BLACKLIST, contentValues,
+						SqlStatement.COLUMN_PHONENUMBER + " = ?",
 						new String[] { list.get(i) });
 			}
 			db.setTransactionSuccessful();
@@ -118,11 +112,11 @@ public class BlacklistDBUtil {
 	 */
 	public boolean isNumExist(String str) {
 		db = mOpenHelper.getReadableDatabase();
-		String[] col = { DBOpenHelper.PHONENUMBER };
+		String[] col = { SqlStatement.COLUMN_PHONENUMBER };
 
-		Cursor cursor = db.query(DBOpenHelper.TABLE_BLACKLIST, col,
-				DBOpenHelper.PHONENUMBER + " = ?", new String[] { str }, null,
-				null, null);
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_BLACKLIST, col,
+				SqlStatement.COLUMN_PHONENUMBER + " = ?", new String[] { str },
+				null, null, null);
 
 		if (cursor.getCount() == 0) {
 			Log.i("isNumExist", "false");
@@ -140,10 +134,11 @@ public class BlacklistDBUtil {
 
 	public boolean isBlock(String str) {
 		db = mOpenHelper.getReadableDatabase();
-		String[] col = { DBOpenHelper.PHONENUMBER };
-		Cursor cursor = db.query(DBOpenHelper.TABLE_BLACKLIST, col,
-				DBOpenHelper.PHONENUMBER + " = ? and " + DBOpenHelper.TAG
-						+ "= 1", new String[] { str }, null, null, null);
+		String[] col = { SqlStatement.COLUMN_PHONENUMBER };
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_BLACKLIST, col,
+				SqlStatement.COLUMN_PHONENUMBER + " = ? and "
+						+ SqlStatement.COLUMN_TAG + "= 1",
+				new String[] { str }, null, null, null);
 		if (cursor.getCount() == 0) {
 			cursor.close();
 			db.close();
@@ -164,9 +159,10 @@ public class BlacklistDBUtil {
 		db = mOpenHelper.getWritableDatabase();
 		try {
 			ContentValues values = new ContentValues();
-			values.put(DBOpenHelper.TAG, 0);
-			db.update(DBOpenHelper.TABLE_BLACKLIST, values,
-					DBOpenHelper.PHONENUMBER + " = ?", new String[] { str });
+			values.put(SqlStatement.COLUMN_TAG, 0);
+			db.update(SqlStatement.DB_TABLE_BLACKLIST, values,
+					SqlStatement.COLUMN_PHONENUMBER + " = ?",
+					new String[] { str });
 		} catch (SQLException e) {
 		}
 	}
@@ -177,9 +173,9 @@ public class BlacklistDBUtil {
 		try {
 			for (int i = 0; i < list.size(); i++) {
 				ContentValues values = new ContentValues();
-				values.put(DBOpenHelper.TAG, 0);
-				db.update(DBOpenHelper.TABLE_BLACKLIST, values,
-						DBOpenHelper.PHONENUMBER + " = ?",
+				values.put(SqlStatement.COLUMN_TAG, 0);
+				db.update(SqlStatement.DB_TABLE_BLACKLIST, values,
+						SqlStatement.COLUMN_PHONENUMBER + " = ?",
 						new String[] { list.get(i) });
 			}
 			db.setTransactionSuccessful();
@@ -193,19 +189,20 @@ public class BlacklistDBUtil {
 
 	public void plusOne(String str) {
 		db = mOpenHelper.getWritableDatabase();
-		String[] col = new String[] { DBOpenHelper.BLOCKEDTIMES };
-		Cursor cursor = db.query(DBOpenHelper.TABLE_BLACKLIST, col,
-				DBOpenHelper.PHONENUMBER + " = ? and " + DBOpenHelper.TAG
-						+ "= 1", new String[] { str }, null, null, null);
+		String[] col = new String[] { SqlStatement.COLUMN_BLOCKED_TIMES };
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_BLACKLIST, col,
+				SqlStatement.COLUMN_PHONENUMBER + " = ? and "
+						+ SqlStatement.COLUMN_TAG + "= 1",
+				new String[] { str }, null, null, null);
 		// int i=cursor.getCount();
 		cursor.moveToFirst();
 		int i = cursor.getInt(0);
 		i++;
 		ContentValues values = new ContentValues();
-		values.put(DBOpenHelper.BLOCKEDTIMES, i);
-		db.update(DBOpenHelper.TABLE_BLACKLIST, values,
-				DBOpenHelper.PHONENUMBER + " = ? and " + DBOpenHelper.TAG
-						+ "= 1", new String[] { str });
+		values.put(SqlStatement.COLUMN_BLOCKED_TIMES, i);
+		db.update(SqlStatement.DB_TABLE_BLACKLIST, values,
+				SqlStatement.COLUMN_PHONENUMBER + " = ? and "
+						+ SqlStatement.COLUMN_TAG + "= 1", new String[] { str });
 
 	}
 

@@ -35,7 +35,6 @@ public class SMSReceiver extends BroadcastReceiver {
 			String sender = null;
 			Date date = null;
 			BlacklistDBUtil bDBUtil = new BlacklistDBUtil(context);
-			bDBUtil.open();
 
 			Object[] pdus = (Object[]) intent.getExtras().get("pdus");
 			if (pdus != null && pdus.length > 0) {
@@ -66,7 +65,6 @@ public class SMSReceiver extends BroadcastReceiver {
 	private Boolean isKeyWord(String content, Context context) {
 
 		WordDBUtil wDBUtil = new WordDBUtil(context);
-		wDBUtil.open();
 		ArrayList<String> keyWordList = wDBUtil.query2();
 		wDBUtil.closeDB();
 		for (String keyWord : keyWordList) {
@@ -94,18 +92,15 @@ public class SMSReceiver extends BroadcastReceiver {
 			@Override
 			protected Void doInBackground(Void... params) {
 				SmsDBUtil sDBUtil = new SmsDBUtil(context);
-				sDBUtil.open();
 
 				if (type == 1) {
 					sDBUtil.addSmsRecord(sender, date, sumContent, type);
 					BlacklistDBUtil bDBUtil = new BlacklistDBUtil(context);
-					bDBUtil.open();
 					bDBUtil.plusOne(sender);
 					bDBUtil.closeDB();
 				} else if (type == 2) {
 					sDBUtil.addSmsRecord(sender, date, sumContent, type, word);
 					WordDBUtil wDBTUil = new WordDBUtil(context);
-					wDBTUil.open();
 					wDBTUil.plusOne(word);
 					wDBTUil.closeDB();
 				}

@@ -4,33 +4,24 @@ import java.util.ArrayList;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 public class WordDBUtil {
 
 	private DBOpenHelper mOpenHelper;
 	private SQLiteDatabase db;
-	private Context context;
 
 	public WordDBUtil(Context context) {
-		this.context = context;
-	}
-
-	public WordDBUtil open() throws SQLException {
-		mOpenHelper = new DBOpenHelper(context, DBOpenHelper.DATABASE_NAME,
-				null, DBOpenHelper.VERSION);
-
-		return this;
+		mOpenHelper = new DBOpenHelper(context);
 	}
 
 	public Cursor query() {
 		db = mOpenHelper.getReadableDatabase();
-		String[] columns = new String[] { DBOpenHelper.WORD,
-				DBOpenHelper.BLOCKEDTIMES };
-		Cursor cursor = db.query(DBOpenHelper.TABLE_WORD, columns,
-				DBOpenHelper.TAG + "=1", null, null, null,
-				DBOpenHelper.BLOCKEDTIMES + " DESC ");
+		String[] columns = new String[] { SqlStatement.COLUMN_WORD,
+				SqlStatement.COLUMN_BLOCKED_TIMES };
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_WORD, columns,
+				SqlStatement.COLUMN_TAG + "=1", null, null, null,
+				SqlStatement.COLUMN_BLOCKED_TIMES + " DESC ");
 		// while(cursor.moveToNext()){
 		// list.add(cursor.getString(0));
 		// }
@@ -40,11 +31,11 @@ public class WordDBUtil {
 
 	public ArrayList<String> query2() {
 		db = mOpenHelper.getReadableDatabase();
-		String[] columns = new String[] { DBOpenHelper.WORD };
+		String[] columns = new String[] { SqlStatement.COLUMN_WORD };
 		ArrayList<String> list = new ArrayList<String>();
-		Cursor cursor = db.query(DBOpenHelper.TABLE_WORD, columns,
-				DBOpenHelper.TAG + "=1", null, null, null,
-				DBOpenHelper.BLOCKEDTIMES + " DESC");
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_WORD, columns,
+				SqlStatement.COLUMN_TAG + "=1", null, null, null,
+				SqlStatement.COLUMN_BLOCKED_TIMES + " DESC");
 		while (cursor.moveToNext()) {
 			list.add(cursor.getString(0));
 		}
@@ -55,26 +46,26 @@ public class WordDBUtil {
 	public void addWord(String word) {
 		if (this.isExist(word)) {
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(DBOpenHelper.TAG, 1);
+			contentValues.put(SqlStatement.COLUMN_TAG, 1);
 
 			db = mOpenHelper.getWritableDatabase();
 
-			db.update(DBOpenHelper.TABLE_WORD, contentValues, DBOpenHelper.WORD
-					+ " = ?", new String[] { word });
+			db.update(SqlStatement.DB_TABLE_WORD, contentValues,
+					SqlStatement.COLUMN_WORD + " = ?", new String[] { word });
 		} else {
 			db = mOpenHelper.getWritableDatabase();
 			ContentValues values = new ContentValues();
-			values.put(DBOpenHelper.WORD, word);
-			db.insert(DBOpenHelper.TABLE_WORD, null, values);
+			values.put(SqlStatement.COLUMN_WORD, word);
+			db.insert(SqlStatement.DB_TABLE_WORD, null, values);
 		}
 
 	}
 
 	public Boolean isExist(String word) {
 		db = mOpenHelper.getReadableDatabase();
-		String[] columns = new String[] { DBOpenHelper.WORD };
-		Cursor cousor = db.query(DBOpenHelper.TABLE_WORD, columns, "word =?",
-				new String[] { word }, null, null, null);
+		String[] columns = new String[] { SqlStatement.COLUMN_WORD };
+		Cursor cousor = db.query(SqlStatement.DB_TABLE_WORD, columns,
+				"word =?", new String[] { word }, null, null, null);
 		if (cousor.getCount() > 0) {
 			return true;
 		} else {
@@ -84,17 +75,19 @@ public class WordDBUtil {
 
 	public void plusOne(String word) {
 		db = mOpenHelper.getWritableDatabase();
-		String[] col = new String[] { DBOpenHelper.BLOCKEDTIMES };
-		Cursor cursor = db.query(DBOpenHelper.TABLE_WORD, col,
-				DBOpenHelper.WORD + " = ? and " + DBOpenHelper.TAG + "= 1",
+		String[] col = new String[] { SqlStatement.COLUMN_BLOCKED_TIMES };
+		Cursor cursor = db.query(SqlStatement.DB_TABLE_WORD, col,
+				SqlStatement.COLUMN_WORD + " = ? and "
+						+ SqlStatement.COLUMN_TAG + "= 1",
 				new String[] { word }, null, null, null);
 		cursor.moveToFirst();
 		int i = cursor.getInt(0);
 		i++;
 		ContentValues values = new ContentValues();
-		values.put(DBOpenHelper.BLOCKEDTIMES, i);
-		db.update(DBOpenHelper.TABLE_WORD, values, DBOpenHelper.WORD
-				+ " = ? and " + DBOpenHelper.TAG + "= 1", new String[] { word });
+		values.put(SqlStatement.COLUMN_BLOCKED_TIMES, i);
+		db.update(SqlStatement.DB_TABLE_WORD, values, SqlStatement.COLUMN_WORD
+				+ " = ? and " + SqlStatement.COLUMN_TAG + "= 1",
+				new String[] { word });
 		db.close();
 	}
 
@@ -104,9 +97,10 @@ public class WordDBUtil {
 		try {
 			for (int i = 0; i < list.size(); i++) {
 				ContentValues values = new ContentValues();
-				values.put(DBOpenHelper.TAG, 0);
-				db.update(DBOpenHelper.TABLE_WORD, values, DBOpenHelper.WORD
-						+ "=?", new String[] { list.get(i) });
+				values.put(SqlStatement.COLUMN_TAG, 0);
+				db.update(SqlStatement.DB_TABLE_WORD, values,
+						SqlStatement.COLUMN_WORD + "=?",
+						new String[] { list.get(i) });
 			}
 			db.setTransactionSuccessful();
 		} catch (Exception e) {
