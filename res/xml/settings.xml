@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="状态" >
+        <CheckBoxPreference
+            android:key="sms_block"
+            android:summaryOff="短信拦截功能关闭"
+            android:summaryOn="短信拦截功能开启"
+            android:title="短信拦截开关" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
