@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">手机小助手</string>
+	<string name="phonenum">号码： </string>
+	<string name="sumtimes">计数：</string>
+	<string name="callintercept">拦截到电话：</string>
+	<string name="smsintercept">拦截到短信：</string>
+	<string name="at">在</string>
+	<string name="intercepted">已拦截</string>
+	<string name="refresh">刷新</string>
+	<string name="add">添加</string>
+	<string name="addbyedit">手动输入</string>
+	<string name="addbycalllog">从通话记录导入</string>
+	<string name="addbysms">从短信记录导入</string>
+	<string name="addbycontacts">从联系人导入</string>
+	<string name="restore">还原</string>
+	<string name="delete">删除</string>
+	<string name="ok">确定</string>
+	<string name="cancel">取消</string>
+	<string name="allselected">全选</string>
+	<string name="alldisselected">全不选</string>
+	<string name="inputerror">输入错误</string>
+	<string name="exist">已存在</string>
+	
+	<string name="settings">设置</string>
+	<string name="call">电话</string>
+	<string name="sms">短信</string>
+	<string name="blacklist">黑名单</string>
+	<string name="more">更多</string>
+	<string name="interceptrecord">拦截记录</string>
+	
+	<string name="backup">备份</string>
+	<string name="contactslook">查看联系人备份</string>
+	<string name="onekeybackup">一键备份</string>
+	<string name="onekeyrestore">一键还原</string>
+	<string name="noname">无姓名</string>
+	
+	<string name="successed">操作成功</string>
+	
+	<string name="incoming">类型：来电</string>
+	<string name="outgoing">类型：去电</string>
+	<string name="missed">类型：未接</string>
+	
+	<string name="stranger">陌生人</string>
+	
+	<string name="compass">指南针</string>
+	<string name="torch">手电筒</string>
+	<string name="word">拦截字典</string>
+	<string name="keyword">关键字</string>
+	<string name="change">切换</string>
+	
+	<string name="typeblacklist">命中黑名单</string>
+	<string name="typekeyword">命中关键字:</string>
+	
+	<string name="changecompassrate">改变传感器灵敏度</string>
+	
+</resources>
